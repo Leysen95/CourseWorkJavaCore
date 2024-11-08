@@ -4,12 +4,12 @@ import me.skypro.CourseWorkJavaCore.exception.QuestionNotFoundException;
 import me.skypro.CourseWorkJavaCore.model.Question;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import static me.skypro.CourseWorkJavaCore.TestData.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class JavaQuestionServiceTest {
@@ -58,6 +58,19 @@ class JavaQuestionServiceTest {
     }
 
     @Test
+    void shouldAddQuestion_WhenCorrectQuestionAndAnswer_ThenThrowException() {
+        String question = "Spring has DI";
+        String answer = "Yes";
+        javaQuestionService.add(question, answer);
+
+        assertThatThrownBy(() -> javaQuestionService.add(question, answer))
+                .isInstanceOf(QuestionNotFoundException.class)
+                .hasMessageContaining(question)
+                .hasMessageContaining(answer);
+
+    }
+
+    @Test
     void shouldRemoveQuestion_WhenCorrectQuestion_ThenRemove() {
         javaQuestionService.add(RANDOM_QUESTION_1);
 
@@ -79,6 +92,28 @@ class JavaQuestionServiceTest {
 
     @Test
     void shouldRemoveQuestion_WhenCorrectQuestionAndAnswer_ThenRemove() {
+        String question = "Spring has DI";
+        String answer = "Yes";
+        javaQuestionService.add(question, answer);
+
+        Question removedQuestion = javaQuestionService.remove(question, answer);
+
+        assertEquals(question, removedQuestion.getQuestion());
+        assertEquals(answer, removedQuestion.getAnswer());
+    }
+
+    @Test
+    void shouldRemoveQuestion_WhenQuestionAndAnswerNotExist_ThenThrowException() {
+        String questionToRemove = "Spring has DI";
+        String answerToRemove = "Yes";
+        javaQuestionService.add(questionToRemove, answerToRemove);
+
+        Exception exception = assertThrows(QuestionNotFoundException.class, () -> {javaQuestionService.remove(questionToRemove, answerToRemove);
+        });
+
+        String expectedMessage = "Question: " + questionToRemove + " with answer: " + answerToRemove + " not found";
+        assertEquals(expectedMessage, exception.getMessage());
+
     }
 
     @Test

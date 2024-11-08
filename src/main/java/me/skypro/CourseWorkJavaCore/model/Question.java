@@ -7,9 +7,9 @@ public class Question {
 
     private final String question;
 
-    public Question(String answer, String question) {
-        this.answer = answer;
+    public Question(String question, String answer) {
         this.question = question;
+        this.answer = answer;
     }
 
     public String getAnswer() {

@@ -11,7 +11,7 @@ public class QuestionNotFoundException extends RuntimeException {
     private final String answer;
 
     public QuestionNotFoundException(String question, String answer) {
-        super("Qustion: %s, with answer: %s not found".formatted(question, answer));
+        super("Question: %s, with answer: %s not found".formatted(question, answer));
         this.question = question;
         this.answer = answer;
     }
